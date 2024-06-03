@@ -1,21 +1,50 @@
 version: 1
 
-before:
-  hooks:
-  - go mod tidy
+env:
+  - CGO_ENABLED=0
 
 builds:
-  - id: "cyctl"
-    env:
-      - CGO_ENABLED=0
+  - id: linux
+    binary: cyctl
     goos:
       - linux
-      - windows
+      - freebsd
+    goarch:
+      - amd64
+      - arm64
+      - arm
+      - ppc64le
+      - s390x
+    goarm:
+      - 7
+    flags:
+      - -trimpath
+    ldflags:
+      - -s -w -X github.com/cyclops-ui/cyclops/cmd.version={{.Version}}
+
+  - id: osx
+    binary: cyctl
+    goos:
       - darwin
     goarch:
       - amd64
       - arm64
+    flags:
+      - -trimpath
+    ldflags:
+      - -s -w -X github.com/cyclops-ui/cyclops/cmd.version={{.Version}}
+
+  - id: windows
     binary: cyctl
+    goos:
+      - windows
+    goarch:
+      - amd64
+      - arm64
+    flags:
+      - -trimpath
+    ldflags:
+      - -s -w -X github.com/cyclops-ui/cyclops/cmd.version={{.Version}}
 
 archives:
   - format: tar.gz
@@ -25,8 +54,25 @@ archives:
         format: zip
 
 checksum:
-  name_template: "cyctl_checksums.txt"
-  algorithm: sha256
+  name_template: "cyctl_checksums.sha256"
+
+nfpms:
+  - file_name_template: 'cyctl_{{ .Os }}_{{ .Arch }}'
+    maintainer: Petar Cvitanović
+    homepage: https://cyclops-ui.com/
+    description: customizable UI for Kubernetes workloads.
+    license: "Apache-2.0"
+    formats:
+      - deb
+      - rpm
+      - apk
+    bindir: /usr/bin
+    section: utils
+    contents:
+      - src: ../LICENSE
+        dst: /usr/share/doc/nfpm/copyright
+        file_info:
+          mode: 0644
 
 release:
   draft: true
