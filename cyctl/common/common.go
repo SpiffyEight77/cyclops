@@ -2,5 +2,5 @@ package common
 
 var (
 	// Cyclops CLI Version
-	CliVersion = "0.2.0"
+	CliVersion = "0.6.5"
 )
