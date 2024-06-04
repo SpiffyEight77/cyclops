@@ -34,7 +34,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          if [ "${{ steps.extract_branch.outputs.branch }}" = "feat/cyctl-version-command" ]; then
+          if [ "${{ steps.extract_branch.outputs.branch }}" = "main" ]; then
             gh release create ${{ github.event.inputs.version }} \
               --repo="https://github.com/SpiffyEight77/cyclops" \
               --title="${{ github.event.inputs.version }}" \
