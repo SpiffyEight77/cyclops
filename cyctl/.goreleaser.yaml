@@ -73,3 +73,9 @@ nfpms:
         dst: /usr/share/doc/nfpm/copyright
         file_info:
           mode: 0644
+
+release:
+  draft: true
+  replace_existing_draft: true
+  replace_existing_artifacts: true
+  make_latest: true
